@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>打地鼠游戏</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+  <!-- 地鼠出现的区域 -->
+  <div class="area">
+      
+  </div>
+  <div class="second">
+    剩余时间：<span>10</span>秒
+  </div>
+  <div class="score">
+    当前得分：<span>0</span>分
+  </div>
+  <script>
+    var hole = "<div class='hole'><img src='./image/mouse.png' alt=''/></div>";
+    var holenum = 16;
+    for(var i = 0;i < holenum; i++){
+      $(".area").append(hole);
+    }
+    //自定义range（）函数，用于生成老鼠编号；
+    function range(m,n){
+        var arr = [];
+        for(var j=m;j<=n;j++){
+          arr.push(j);
+        }
+        return arr;
+      }
+    //定时器
+    var time = setInterval(function(){
+      //生成随机数
+      var num = Math.ceil(Math.random()*4);
+      var arr2 = range(0,15);
+      for(var i=0;i<num;i++){
+        var randNum = Math.floor(Math.random()*arr2.length);
+        var mouse = $('img').eq(arr2.splice(randNum,1));
+        if(mouse.is(":hidden")){
+          mouse.fadeIn(100,function(){
+            $(this).delay(2000).fadeOut();
+          })
+        }
+      }
+    },1000)
+    //游戏计时
+    var second = 20;
+    var time2 = setInterval(function(){
+      second -= 1;
+      if(second >= 0){
+        $(".second span").html(second)
+      }else{
+        clearInterval(time);
+        $('.area').html('<h1>游戏结束！</h1>')
+      }
+    },1000)
+    //得分计数
+    $('.hole img').click(function(){
+      $(this).hide();
+      var score = parseInt($('.score span').html())+1;
+      $('.score span').html(score);
+    })
+  </script>
+</body>
+</html>
